@@ -19,7 +19,7 @@ public class Constants {
 
     public static final int DRAW = 0;
 
-    public static final int CONNECTION_ֹTIMEOUT = 10 * 60 * 1000;
+    public static final int CONNECTION_TIMEOUT = 10 * 60 * 1000;
 
 
 

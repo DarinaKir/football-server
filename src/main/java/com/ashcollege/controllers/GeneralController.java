@@ -30,9 +30,9 @@ public class GeneralController {
 
     @PostConstruct
     public void init() {
-//        persist.delete("Gamble");
-//        persist.delete("Match");
-//        persist.delete("Team");
+        persist.delete("Gamble");
+        persist.delete("Match");
+        persist.delete("Team");
 
         persist.createTeams();
         final ArrayList<ArrayList<Match>> league = persist.getLeagueGames();
@@ -74,18 +74,20 @@ public class GeneralController {
         new Thread(() -> {
             while (true) {
                 try {
+                    persist.addGoals();
+                    for (SseEmitter emitter : clients) {
+                        try {
+                            emitter.send(persist.loadMatchList());
+                        }catch (Exception e) {
+                        }
+                    }
+                } catch (Exception e) {
+                }
+                try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                try {
-                    persist.addGoals();
-                    for (SseEmitter emitter : clients) {
-                        emitter.send(persist.loadMatchList());
-                    }
-                } catch (Exception e) {
-                }
-
             }
         }).start();
     }
@@ -130,7 +132,7 @@ public class GeneralController {
     @RequestMapping(value = "start-streaming", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter CreateStreamingSession() {
         try {
-            SseEmitter sseEmitter = new SseEmitter((long) (CONNECTION_ֹTIMEOUT));
+            SseEmitter sseEmitter = new SseEmitter((long) (CONNECTION_TIMEOUT));
             clients.add(sseEmitter);
             return sseEmitter;
         } catch (Exception e) {
