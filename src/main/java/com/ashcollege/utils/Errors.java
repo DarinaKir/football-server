@@ -12,7 +12,4 @@ public class Errors {
     public static final int ERROR_NO_SUCH_USER = 9;
     public static final int ERROR_NOT_ENOUGH_MONEY = 10;
     public static final int ERROR_GAME_ALREADY_STARTED = 11;
-
-
-
 }
